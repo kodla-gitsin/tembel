@@ -1,0 +1,1574 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faktöriyel, Permütasyon ve Kombinasyon</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 3rem;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 0.5rem;
+            backdrop-filter: blur(10px);
+        }
+        
+        .tab-button {
+            background: transparent;
+            border: none;
+            padding: 1rem 2rem;
+            margin: 0 0.25rem;
+            border-radius: 10px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .tab-button:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .tab-button.active {
+            background: white;
+            color: #4a5568;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .tab-icon {
+            font-size: 1.2rem;
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .content-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+        
+        .theory-calculator-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+        
+        .theory-section h2 {
+            color: #4a5568;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .calculator-section {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 2rem;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .calculator-section h3 {
+            color: #2d3748;
+            margin-bottom: 1.5rem;
+            font-size: 1.4rem;
+            text-align: center;
+        }
+        
+        .formula {
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 1.2rem;
+            text-align: center;
+            color: #2d3748;
+        }
+        
+        .example {
+            background: #e6fffa;
+            border-left: 4px solid #38b2ac;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+
+        
+        .input-group {
+            margin-bottom: 1rem;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #4a5568;
+            font-weight: 500;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .calc-button {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            margin-bottom: 1rem;
+        }
+        
+        .calc-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .result {
+            background: #f0fff4;
+            border: 2px solid #68d391;
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2f855a;
+        }
+        
+        .error {
+            background: #fed7d7;
+            border: 2px solid #fc8181;
+            color: #c53030;
+        }
+        
+        .questions-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .question-card {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .question-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.1);
+        }
+        
+        .question {
+            font-size: 1rem;
+            color: #2d3748;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+        
+        .solution-btn {
+            background: linear-gradient(135deg, #38b2ac 0%, #319795 100%);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 1rem;
+        }
+        
+        .solution-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(56, 178, 172, 0.3);
+        }
+        
+        .solution {
+            background: #e6fffa;
+            border-left: 4px solid #38b2ac;
+            padding: 1rem;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.95rem;
+            color: #2d3748;
+            line-height: 1.5;
+            animation: slideDown 0.3s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .tabs {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .tab-button {
+                justify-content: center;
+                margin: 0;
+            }
+            
+            .content-card {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                padding: 1.5rem;
+            }
+            
+            .theory-calculator-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .questions-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .calculator-section {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Matematik Dünyası</h1>
+            <p>Faktöriyel, Permütasyon ve Kombinasyon</p>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab-button active" onclick="openTab(event, 'factorial-tab')">
+                <span class="tab-icon">❗</span>Faktöriyel
+            </button>
+            <button class="tab-button" onclick="openTab(event, 'permutation-tab')">
+                <span class="tab-icon">🔄</span>Permütasyon
+            </button>
+            <button class="tab-button" onclick="openTab(event, 'combination-tab')">
+                <span class="tab-icon">🎯</span>Kombinasyon
+            </button>
+            <button class="tab-button" onclick="openTab(event, 'olympiad-tab')">
+                <span class="tab-icon">🏆</span>Olimpiyat Soruları
+            </button>
+        </div>
+        
+        <div id="factorial-tab" class="tab-content active">
+            <div class="content-card">
+                <div class="theory-section">
+                    <h2>❗ Faktöriyel Nedir?</h2>
+                    <p><strong>Faktöriyel</strong>, bir pozitif tam sayının kendisi ve kendisinden küçük tüm pozitif tam sayıların çarpımıdır. Faktöriyel işlemi "!" sembolü ile gösterilir ve "n faktöriyel" şeklinde okunur.</p>
+                    
+                    <div class="formula">
+                        n! = n × (n-1) × (n-2) × ... × 2 × 1
+                    </div>
+                    
+                    <h3>🔍 Detaylı Açıklama</h3>
+                    <p><strong>Özel Durumlar:</strong></p>
+                    <ul>
+                        <li><strong>0! = 1</strong> (Tanım gereği)</li>
+                        <li><strong>1! = 1</strong></li>
+                        <li>Negatif sayıların faktöriyeli tanımlı değildir</li>
+                    </ul>
+                    
+                    <p><strong>Pratik Hesaplama İpuçları:</strong></p>
+                    <ul>
+                        <li>Büyük faktöriyellerden küçük faktöriyelleri çıkarırken ortak çarpanları kullanın</li>
+                        <li>n!/k! = n × (n-1) × ... × (k+1) şeklinde sadeleştirin</li>
+                        <li>Faktöriyel değerleri çok hızlı büyür (10! = 3,628,800)</li>
+                    </ul>
+                    
+                    <div class="example">
+                        <strong>Örnek:</strong> 6! = 6 × 5 × 4 × 3 × 2 × 1 = 720<br>
+                        <strong>Kısa yol:</strong> 6!/4! = 6 × 5 = 30
+                    </div>
+                    
+                    <p><strong>Kullanım Alanları:</strong> Sıralama problemleri, olasılık hesaplamaları, kombinatorik, matematik analizi</p>
+                </div>
+                
+                <div class="calculator-section">
+                    <h3>🧮 Faktöriyel Hesaplayıcı</h3>
+                    <div class="input-group">
+                        <label for="factorial-n">n değeri girin:</label>
+                        <input type="number" id="factorial-n" min="0" max="20" placeholder="Örnek: 5">
+                    </div>
+                    <button class="calc-button" onclick="calculateFactorial()">Faktöriyel Hesapla</button>
+                    <div id="factorial-result" class="result" style="display: none;"></div>
+                </div>
+                    
+                    <h3>📚 Örnek Sorular</h3>
+                    <div class="questions-container">
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 1:</strong> 0! kaçtır?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> Tanım gereği 0! = 1
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 2:</strong> 5! değerini hesaplayın.
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> 5! = 5 × 4 × 3 × 2 × 1 = 120
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 3:</strong> 7! / 5! işleminin sonucu nedir?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> 7! / 5! = (7 × 6 × 5!) / 5! = 7 × 6 = 42
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 4:</strong> 4 kişi bir sıraya kaç farklı şekilde dizilir?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> 4! = 4 × 3 × 2 × 1 = 24 farklı şekilde
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 5:</strong> 6! - 5! işleminin sonucu nedir?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> 6! - 5! = 720 - 120 = 600
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 6:</strong> 8! / 6! kaçtır?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> 8! / 6! = (8 × 7 × 6!) / 6! = 8 × 7 = 56
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 7:</strong> 3! × 4! işleminin sonucu nedir?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> 3! × 4! = 6 × 24 = 144
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 8:</strong> 10! / 8! kaçtır?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> 10! / 8! = (10 × 9 × 8!) / 8! = 10 × 9 = 90
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 9:</strong> 5 farklı kitap bir rafa kaç şekilde dizilir?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> 5! = 120 farklı şekilde
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 10:</strong> 2! + 3! + 4! toplamı kaçtır?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> 2! + 3! + 4! = 2 + 6 + 24 = 32
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 11:</strong> 9! / 7! işleminin sonucu nedir?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> 9! / 7! = (9 × 8 × 7!) / 7! = 9 × 8 = 72
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 12:</strong> 6 öğrenci bir sınıfta kaç farklı şekilde sıralanır?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> 6! = 720 farklı şekilde
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 13:</strong> 7! / (5! × 2!) kaçtır?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> 7! / (5! × 2!) = 5040 / (120 × 2) = 5040 / 240 = 21
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 14:</strong> 1! × 2! × 3! işleminin sonucu nedir?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> 1! × 2! × 3! = 1 × 2 × 6 = 12
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 15:</strong> 8! / (6! × 2!) kaçtır?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> 8! / (6! × 2!) = 40320 / (720 × 2) = 40320 / 1440 = 28
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 16:</strong> 3 erkek ve 2 kız toplam kaç şekilde sıralanır?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> 5! = 120 farklı şekilde
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 17:</strong> 12! / 10! işleminin sonucu nedir?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> 12! / 10! = (12 × 11 × 10!) / 10! = 12 × 11 = 132
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 18:</strong> 4! + 5! - 3! toplamı kaçtır?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> 4! + 5! - 3! = 24 + 120 - 6 = 138
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 19:</strong> 7 farklı renk kalem kaç şekilde sıralanır?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> 7! = 5040 farklı şekilde
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 20:</strong> 11! / (9! × 2!) kaçtır?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> 11! / (9! × 2!) = (11 × 10 × 9!) / (9! × 2) = (11 × 10) / 2 = 55
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p><strong>Kullanım Alanları:</strong> Sıralama problemleri, olasılık hesaplamaları, kombinatorik, matematik analizi</p>
+                </div>
+                
+                <div class="calculator-section">
+                    <h3>🧮 Faktöriyel Hesaplayıcı</h3>
+                    <div class="input-group">
+                        <label for="factorial-n">n değeri girin:</label>
+                        <input type="number" id="factorial-n" min="0" max="20" placeholder="Örnek: 5">
+                    </div>
+                    <button class="calc-button" onclick="calculateFactorial()">Faktöriyel Hesapla</button>
+                    <div id="factorial-result" class="result" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="permutation-tab" class="tab-content">
+            <div class="content-card">
+                <div class="theory-section">
+                    <h2>🔄 Permütasyon Nedir?</h2>
+                    <p><strong>Permütasyon</strong>, n elemanlı bir kümeden r eleman seçip bunları sıralama sayısıdır. Permütasyonda sıralama önemlidir! Yani ABC ile BAC farklı permütasyonlardır.</p>
+                    
+                    <div class="formula">
+                        P(n,r) = n! / (n-r)!
+                    </div>
+                    
+                    <h3>🔍 Detaylı Açıklama</h3>
+                    <p><strong>Temel Kavramlar:</strong></p>
+                    <ul>
+                        <li><strong>n:</strong> Toplam eleman sayısı</li>
+                        <li><strong>r:</strong> Seçilen eleman sayısı (r ≤ n)</li>
+                        <li><strong>Sıralama önemli:</strong> AB ≠ BA</li>
+                    </ul>
+                    
+                    <p><strong>Özel Durumlar:</strong></p>
+                    <ul>
+                        <li><strong>P(n,n) = n!</strong> (Tüm elemanları sıralama)</li>
+                        <li><strong>P(n,1) = n</strong> (Tek eleman seçme)</li>
+                        <li><strong>P(n,0) = 1</strong> (Hiç eleman seçmeme)</li>
+                    </ul>
+                    
+                    <p><strong>Hesaplama Mantığı:</strong></p>
+                    <ul>
+                        <li>İlk pozisyon için n seçenek</li>
+                        <li>İkinci pozisyon için (n-1) seçenek</li>
+                        <li>r. pozisyon için (n-r+1) seçenek</li>
+                        <li>Toplam: n × (n-1) × ... × (n-r+1)</li>
+                    </ul>
+                    
+                    <div class="example">
+                        <strong>Örnek:</strong> 5 kişiden 3'ünü seçip sıralama<br>
+                        P(5,3) = 5!/(5-3)! = 5!/2! = 120/2 = 60<br>
+                        <strong>Mantık:</strong> 5 × 4 × 3 = 60
+                    </div>
+                    
+                    <h3>📚 Örnek Sorular</h3>
+                    <div class="questions-container">
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 1:</strong> 5 kişiden 3'ünü seçip sıralama sayısı kaçtır?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> P(5,3) = 5!/(5-3)! = 5!/2! = 120/2 = 60
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 2:</strong> 4 farklı kitaptan 2'sini seçip sıralama sayısı?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> P(4,2) = 4!/2! = 24/2 = 12
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 3:</strong> 6 öğrenciden 4'ünü seçip sıralama sayısı?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> P(6,4) = 6!/2! = 720/2 = 360
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 4:</strong> 3 harften 2'sini seçip sıralama sayısı?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> P(3,2) = 3!/1! = 6/1 = 6
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 5:</strong> 7 renkten 2'sini seçip sıralama sayısı?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> P(7,2) = 7!/5! = 5040/120 = 42
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 6:</strong> 8 sporcudan 3'ünü seçip podium sıralaması kaç şekilde?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> P(8,3) = 8!/5! = 40320/120 = 336
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 7:</strong> 4 kişinin tamamını sıralama sayısı?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> P(4,4) = 4!/0! = 24/1 = 24
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 8:</strong> 9 öğrenciden 2'sini seçip başkan-başkan yardımcısı seçimi?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> P(9,2) = 9!/7! = 362880/5040 = 72
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 9:</strong> 5 farklı bayraktan 3'ünü seçip sıralama?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> P(5,3) = 5!/2! = 120/2 = 60
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 10:</strong> 10 kişiden 2'sini seçip sıralama sayısı?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> P(10,2) = 10!/8! = 3628800/40320 = 90
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 11:</strong> 6 farklı arabadan 3'ünü seçip park sıralaması?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> P(6,3) = 6!/3! = 720/6 = 120
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 12:</strong> 3 kişiden 1'ini seçme sayısı?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> P(3,1) = 3!/2! = 6/2 = 3
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 13:</strong> 7 öğrenciden 3'ünü seçip sınıf temsilcisi sıralaması?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> P(7,3) = 7!/4! = 5040/24 = 210
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 14:</strong> 5 farklı yemekten 2'sini seçip menü sıralaması?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> P(5,2) = 5!/3! = 120/6 = 20
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 15:</strong> 8 kişiden 2'sini seçip takım kaptanı sıralaması?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> P(8,2) = 8!/6! = 40320/720 = 56
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 16:</strong> 4 farklı şarkıdan 3'ünü seçip çalma sırası?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> P(4,3) = 4!/1! = 24/1 = 24
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 17:</strong> 6 takımdan 2'sini seçip final maçı sıralaması?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> P(6,2) = 6!/4! = 720/24 = 30
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 18:</strong> 5 öğrencinin tamamını sıralama sayısı?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> P(5,5) = 5!/0! = 120/1 = 120
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 19:</strong> 9 farklı kitaptan 3'ünü seçip raf sıralaması?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> P(9,3) = 9!/6! = 362880/720 = 504
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 20:</strong> 11 kişiden 2'sini seçip lider sıralaması?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> P(11,2) = 11!/9! = 39916800/362880 = 110
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p><strong>Kullanım Alanları:</strong> Yarış sıralaması, şifre oluşturma, koltuk düzeni, turnuva organizasyonu</p>
+                </div>
+                
+                <div class="calculator-section">
+                    <h3>🧮 Permütasyon Hesaplayıcı</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="input-group">
+                            <label for="perm-n">n değeri (toplam eleman sayısı):</label>
+                            <input type="number" id="perm-n" min="0" max="20" placeholder="Örnek: 5">
+                        </div>
+                        <div class="input-group">
+                            <label for="perm-r">r değeri (seçilen eleman sayısı):</label>
+                            <input type="number" id="perm-r" min="0" max="20" placeholder="Örnek: 3">
+                        </div>
+                    </div>
+                    <button class="calc-button" onclick="calculatePermutation()">Permütasyon Hesapla</button>
+                    <div id="perm-result" class="result" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="combination-tab" class="tab-content">
+            <div class="content-card">
+                <div class="theory-section">
+                    <h2>🎯 Kombinasyon Nedir?</h2>
+                    <p><strong>Kombinasyon</strong>, n elemanlı bir kümeden r eleman seçme sayısıdır. Kombinasyonda sıralama önemli değildir! Yani ABC ile BAC aynı kombinasyondur.</p>
+                    
+                    <div class="formula">
+                        C(n,r) = n! / (r! × (n-r)!)
+                    </div>
+                    
+                    <h3>🔍 Detaylı Açıklama</h3>
+                    <p><strong>Temel Kavramlar:</strong></p>
+                    <ul>
+                        <li><strong>n:</strong> Toplam eleman sayısı</li>
+                        <li><strong>r:</strong> Seçilen eleman sayısı (r ≤ n)</li>
+                        <li><strong>Sıralama önemsiz:</strong> AB = BA</li>
+                    </ul>
+                    
+                    <p><strong>Özel Durumlar:</strong></p>
+                    <ul>
+                        <li><strong>C(n,0) = 1</strong> (Hiç eleman seçmeme)</li>
+                        <li><strong>C(n,1) = n</strong> (Tek eleman seçme)</li>
+                        <li><strong>C(n,n) = 1</strong> (Tüm elemanları seçme)</li>
+                        <li><strong>C(n,r) = C(n,n-r)</strong> (Simetri özelliği)</li>
+                    </ul>
+                    
+                    <p><strong>Permütasyon ile İlişkisi:</strong></p>
+                    <ul>
+                        <li>C(n,r) = P(n,r) / r!</li>
+                        <li>Permütasyondan sıralama faktörünü çıkarırız</li>
+                        <li>r eleman r! farklı şekilde sıralanabilir</li>
+                    </ul>
+                    
+                    <p><strong>Pascal Üçgeni:</strong></p>
+                    <ul>
+                        <li>C(n,r) + C(n,r+1) = C(n+1,r+1)</li>
+                        <li>Kombinasyon değerleri Pascal üçgenini oluşturur</li>
+                    </ul>
+                    
+                    <div class="example">
+                        <strong>Örnek:</strong> 5 kişiden 3'ünü seçerek komite oluşturma<br>
+                        C(5,3) = 5!/(3!×2!) = 120/(6×2) = 10<br>
+                        <strong>Kontrol:</strong> C(5,2) = 5!/(2!×3!) = 10 ✓
+                    </div>
+                    
+                    <h3>📚 Örnek Sorular</h3>
+                    <div class="questions-container">
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 1:</strong> 5 kişiden 3'ünü seçerek komite oluşturma sayısı?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> C(5,3) = 5!/(3!×2!) = 120/(6×2) = 10
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 2:</strong> 8 öğrenciden 4'ünü seçerek grup oluşturma?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> C(8,4) = 8!/(4!×4!) = 40320/(24×24) = 70
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 3:</strong> 6 renkten 2'sini seçme sayısı?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> C(6,2) = 6!/(2!×4!) = 720/(2×24) = 15
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 4:</strong> 10 kitaptan 3'ünü seçme sayısı?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> C(10,3) = 10!/(3!×7!) = 3628800/(6×5040) = 120
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 5:</strong> 7 sporcudan 4'ünü seçerek takım kurma?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> C(7,4) = 7!/(4!×3!) = 5040/(24×6) = 35
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 6:</strong> 9 yemekten 2'sini seçme sayısı?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> C(9,2) = 9!/(2!×7!) = 362880/(2×5040) = 36
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 7:</strong> 4 arkadaştan 2'sini seçme sayısı?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> C(4,2) = 4!/(2!×2!) = 24/(2×2) = 6
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 8:</strong> 12 öğrenciden 5'ini seçerek proje grubu?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> C(12,5) = 12!/(5!×7!) = 479001600/(120×5040) = 792
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 9:</strong> 6 şehirden 3'ünü ziyaret etme seçimi?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> C(6,3) = 6!/(3!×3!) = 720/(6×6) = 20
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 10:</strong> 8 dersten 3'ünü seçme sayısı?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> C(8,3) = 8!/(3!×5!) = 40320/(6×120) = 56
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 11:</strong> 5 çiçekten 2'sini seçme sayısı?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> C(5,2) = 5!/(2!×3!) = 120/(2×6) = 10
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 12:</strong> 7 oyuncudan 3'ünü seçerek başlangıç kadrosu?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> C(7,3) = 7!/(3!×4!) = 5040/(6×24) = 35
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 13:</strong> 11 kişiden 4'ünü seçerek yönetim kurulu?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> C(11,4) = 11!/(4!×7!) = 39916800/(24×5040) = 330
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 14:</strong> 3 meyve türünden 1'ini seçme?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> C(3,1) = 3!/(1!×2!) = 6/(1×2) = 3
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 15:</strong> 9 öğrenciden 5'ini seçerek çalışma grubu?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> C(9,5) = 9!/(5!×4!) = 362880/(120×24) = 126
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 16:</strong> 6 film türünden 4'ünü seçme?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> C(6,4) = 6!/(4!×2!) = 720/(24×2) = 15
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 17:</strong> 10 sayıdan 2'sini seçme sayısı?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> C(10,2) = 10!/(2!×8!) = 3628800/(2×40320) = 45
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 18:</strong> 8 renk kalemden 5'ini seçme?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> C(8,5) = 8!/(5!×3!) = 40320/(120×6) = 56
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 19:</strong> 13 kişiden 6'sını seçerek komisyon?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> C(13,6) = 13!/(6!×7!) = 6227020800/(720×5040) = 1716
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 20:</strong> 15 soruda 10'unu seçme sayısı?
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong> C(15,10) = 15!/(10!×5!) = 1307674368000/(3628800×120) = 3003
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p><strong>Kullanım Alanları:</strong> Takım seçimi, loto, grup oluşturma, komite belirleme, örnekleme</p>
+                </div>
+                
+                <div class="calculator-section">
+                    <h3>🧮 Kombinasyon Hesaplayıcı</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="input-group">
+                            <label for="comb-n">n değeri (toplam eleman sayısı):</label>
+                            <input type="number" id="comb-n" min="0" max="20" placeholder="Örnek: 5">
+                        </div>
+                        <div class="input-group">
+                            <label for="comb-r">r değeri (seçilen eleman sayısı):</label>
+                            <input type="number" id="comb-r" min="0" max="20" placeholder="Örnek: 3">
+                        </div>
+                    </div>
+                    <button class="calc-button" onclick="calculateCombination()">Kombinasyon Hesapla</button>
+                    <div id="comb-result" class="result" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="olympiad-tab" class="tab-content">
+            <div class="content-card">
+                <div class="theory-section">
+                    <h2>🏆 Bilgisayar Olimpiyatları Seviyesi</h2>
+                    <p>Bu bölümde <strong>bilgisayar olimpiyatları seviyesinde</strong> kombinatorik problemleri bulacaksınız. Bu sorular algoritma mantığı, sistematik düşünme ve optimizasyon gerektiren problemlerdir.</p>
+                    
+                    <div class="example">
+                        <strong>İpucu:</strong> Bu soruları çözerken algoritma mantığıyla yaklaşın. Problemi adım adım çözün, özel durumları kontrol edin ve matematiksel kalıpları arayın.
+                    </div>
+                    
+                    <h3>🧠 Zorlu Problemler</h3>
+                    <div class="questions-container">
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 1:</strong> n×n boyutunda bir ızgarada sol üst köşeden (0,0) sağ alt köşeye (n-1,n-1) sadece sağa ve aşağı hareket ederek gidebilirsiniz. Ancak bazı kareler engellidir. Engelli kareler listesi verildiğinde, kaç farklı yol vardır? (n=4, engelli kareler: (1,1), (2,2))
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong><br>
+                                Dinamik programlama kullanarak:<br>
+                                dp[i][j] = engelli değilse dp[i-1][j] + dp[i][j-1]<br>
+                                dp[0][0] = 1, engelli kareler = 0<br>
+                                Sonuç: dp[3][3] = <strong>8 farklı yol</strong>
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 2:</strong> Bir dizide n eleman var. Bu dizinin tüm alt dizilerinin (subsequence) sayısını bulun. Alt dizi, orijinal dizinin sırasını bozmadan seçilen elemanlardan oluşur. (n=5 için)
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong><br>
+                                Her eleman için 2 seçenek: dahil et veya etme<br>
+                                Toplam alt dizi sayısı: 2^n<br>
+                                n=5 için: 2^5 = <strong>32 alt dizi</strong><br>
+                                (Boş dizi dahil)
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 3:</strong> Bir binary string'de (0 ve 1'lerden oluşan) ardışık iki 1'in bulunmadığı n uzunluğundaki string sayısını bulun. (n=5 için)
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong><br>
+                                dp[i][0] = i. pozisyonda 0 ile biten string sayısı<br>
+                                dp[i][1] = i. pozisyonda 1 ile biten string sayısı<br>
+                                dp[i][0] = dp[i-1][0] + dp[i-1][1]<br>
+                                dp[i][1] = dp[i-1][0]<br>
+                                n=5 için: <strong>13 farklı string</strong>
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 4:</strong> n elemanlı bir dizide kaç farklı "increasing subsequence" (artan alt dizi) vardır? Elemanlar farklı olduğunu varsayın. (n=4, dizi=[1,3,2,4])
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong><br>
+                                Her eleman için kendinden küçük elemanlarla oluşturduğu alt dizileri say<br>
+                                dp[i] = i. elemana kadar olan artan alt dizi sayısı<br>
+                                [1,3,2,4] için: 1→2, 1→3, 1→4, 2→4, 3→4, 1→2→4, 1→3→4<br>
+                                Toplam: <strong>15 artan alt dizi</strong>
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 5:</strong> n×m boyutunda bir ızgarada kaç farklı dikdörtgen çizilebilir? (n=3, m=4 için)
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong><br>
+                                Dikdörtgen için 2 yatay, 2 dikey çizgi seç<br>
+                                Yatay çizgiler: C(n+1, 2) = C(4,2) = 6<br>
+                                Dikey çizgiler: C(m+1, 2) = C(5,2) = 10<br>
+                                Toplam: 6 × 10 = <strong>60 dikdörtgen</strong>
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 6:</strong> Bir ağaçta n düğüm var. Bu ağacın kaç farklı "spanning tree"si vardır? (Complete graph K₄ için)
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong><br>
+                                Cayley's formula: n^(n-2)<br>
+                                K₄ (4 düğümlü complete graph) için:<br>
+                                4^(4-2) = 4² = <strong>16 spanning tree</strong>
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 7:</strong> n kişi dairesel masaya oturuyor. Hiç kimsenin kendi yerinde oturmaması için kaç düzenleme vardır? (Circular derangement, n=4)
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong><br>
+                                Dairesel derangement: (n-1)! × Σ(-1)^k/k!<br>
+                                n=4 için: 3! × [1 - 1 + 1/2 - 1/6 + 1/24]<br>
+                                = 6 × 9/24 = <strong>2.25 ≈ 2</strong> (tam sayı)
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 8:</strong> Bir binary tree'de n iç düğüm (internal node) varsa, kaç farklı binary tree oluşturulabilir? (Catalan sayısı, n=3)
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong><br>
+                                n. Catalan sayısı: C_n = C(2n,n)/(n+1)<br>
+                                n=3 için: C₃ = C(6,3)/4 = 20/4 = <strong>5 farklı tree</strong><br>
+                                Genel formül: C_n = (2n)!/(n!(n+1)!)
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 9:</strong> n×n satranç tahtasında kaç farklı şekilde n tane vezir yerleştirilebilir ki hiçbiri birbirini tehdit etmesin? (n=4 için)
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong><br>
+                                N-Queens problemi, backtracking ile çözülür<br>
+                                Her satırda 1 vezir, aynı sütun/çaprazda çakışma yok<br>
+                                n=4 için: <strong>2 farklı çözüm</strong><br>
+                                n=8 için: 92 çözüm
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 10:</strong> Bir graf G'de n düğüm ve m kenar var. Bu grafın kaç farklı "perfect matching"i vardır? (K₄ complete graph için)
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong><br>
+                                Perfect matching: her düğümün tam 1 kenarla eşleşmesi<br>
+                                K₄ için: 4 düğümü 2'şer çift halinde eşleştir<br>
+                                (4!)/(2!×2!) = 24/4 = <strong>6 perfect matching</strong>
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 11:</strong> Bir string'de kaç farklı palindrom alt string vardır? (String = "ababa" için)
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong><br>
+                                Her karakter merkez olarak palindromları say<br>
+                                Tek uzunluk: a(3), b(2) = 5<br>
+                                Çift uzunluk: aba(2), bab(1) = 3<br>
+                                "ababa" için: <strong>9 palindrom alt string</strong>
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 12:</strong> n elemanlı bir kümenin kaç farklı "involution"u vardır? (Kendine ters fonksiyon, n=4)
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong><br>
+                                Involution: f(f(x)) = x olan fonksiyon<br>
+                                Elemanlar sabit kalır veya 2'li çiftler oluşturur<br>
+                                n=4 için: I₄ = I₃ + 3×I₂ = 4 + 3×2 = <strong>10</strong>
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 13:</strong> Bir ağaçta "Hamiltonian path" sayısını bulun. (Path graph P₅ için)
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong><br>
+                                Hamiltonian path: tüm düğümleri bir kez ziyaret eden yol<br>
+                                P₅ (5 düğümlü path) için: 1-2-3-4-5 veya 5-4-3-2-1<br>
+                                Toplam: <strong>2 Hamiltonian path</strong>
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 14:</strong> n×n ızgarada kaç farklı "monotonic path" vardır? (Sadece sağ-yukarı hareket, n=3)
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong><br>
+                                (0,0)'dan (n-1,n-1)'e monotonic path<br>
+                                n-1 sağ, n-1 yukarı hareket gerekli<br>
+                                n=3 için: C(4,2) = <strong>6 farklı yol</strong>
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 15:</strong> Bir binary heap'te n eleman varsa, kaç farklı heap oluşturulabilir? (n=4, elemanlar 1,2,3,4)
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong><br>
+                                Max-heap özelliği: parent ≥ children<br>
+                                Kök en büyük (4), alt seviyeler heap özelliğini korur<br>
+                                n=4 için: <strong>8 farklı heap</strong>
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 16:</strong> Bir graf G'nin "chromatic polynomial"unu bulun. (Triangle graph K₃ için)
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong><br>
+                                Chromatic polynomial: P(G,k) = k renk ile boyama sayısı<br>
+                                K₃ için: P(K₃,k) = k(k-1)(k-2)<br>
+                                k=4 renk için: 4×3×2 = <strong>24 farklı boyama</strong>
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 17:</strong> n elemanlı bir dizide "longest increasing subsequence" kaç farklı şekilde seçilebilir? (dizi=[1,3,2,4])
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong><br>
+                                LIS uzunluğu: 3 ([1,3,4] veya [1,2,4])<br>
+                                dp[i] = i. elemanda biten LIS sayısı<br>
+                                [1,3,2,4] için: <strong>2 farklı LIS</strong>
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 18:</strong> Bir "tiling problem": 2×n dikdörtgeni 1×2 domino ile kaç şekilde kaplayabilirsiniz? (n=4)
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong><br>
+                                Fibonacci dizisi: F(n) = F(n-1) + F(n-2)<br>
+                                F(1)=1, F(2)=2, F(3)=3, F(4)=5<br>
+                                n=4 için: <strong>5 farklı kaplama</strong>
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 19:</strong> Bir "necklace problem": n boncuktan k farklı renk ile kaç farklı kolye yapılabilir? (n=4, k=3)
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong><br>
+                                Burnside lemma ile döngüsel simetri<br>
+                                (k^n + (n-1)×k^gcd(n,i)) / n<br>
+                                n=4, k=3 için: (81 + 3×9) / 4 = <strong>27 farklı kolye</strong>
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">
+                                <strong>Soru 20:</strong> Bir "bracket sequence": n çift parantez için kaç farklı geçerli parantez dizisi vardır? (n=3)
+                            </div>
+                            <button class="solution-btn" onclick="toggleSolution(this)">Çözümü Göster</button>
+                            <div class="solution" style="display: none;">
+                                <strong>Çözüm:</strong><br>
+                                Catalan sayısı: C_n = C(2n,n)/(n+1)<br>
+                                n=3 için: C₃ = C(6,3)/4 = 20/4 = <strong>5</strong><br>
+                                Örnek: ((())), (()()), (())(), ()(()), ()()()
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="example">
+                        <strong>Not:</strong> Bu sorular bilgisayar olimpiyatlarında karşılaşabileceğiniz algoritma ve kombinatorik problemleridir. Dinamik programlama, graf teorisi, string algoritmaları ve matematiksel yapıları içermektedir. Her problem farklı bir algoritma tekniği öğretir!
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function factorial(n) {
+            if (n === 0 || n === 1) return 1;
+            let result = 1;
+            for (let i = 2; i <= n; i++) {
+                result *= i;
+            }
+            return result;
+        }
+
+        function calculateFactorial() {
+            const n = parseInt(document.getElementById('factorial-n').value);
+            const resultDiv = document.getElementById('factorial-result');
+            
+            if (isNaN(n) || n < 0) {
+                resultDiv.textContent = 'Lütfen geçerli bir pozitif sayı girin!';
+                resultDiv.className = 'result error';
+                resultDiv.style.display = 'block';
+                return;
+            }
+            
+            if (n > 20) {
+                resultDiv.textContent = 'Çok büyük sayılar için hesaplama yapılamaz (maksimum 20)';
+                resultDiv.className = 'result error';
+                resultDiv.style.display = 'block';
+                return;
+            }
+            
+            const result = factorial(n);
+            resultDiv.textContent = `${n}! = ${result.toLocaleString('tr-TR')}`;
+            resultDiv.className = 'result';
+            resultDiv.style.display = 'block';
+        }
+
+        function calculatePermutation() {
+            const n = parseInt(document.getElementById('perm-n').value);
+            const r = parseInt(document.getElementById('perm-r').value);
+            const resultDiv = document.getElementById('perm-result');
+            
+            if (isNaN(n) || isNaN(r) || n < 0 || r < 0) {
+                resultDiv.textContent = 'Lütfen geçerli pozitif sayılar girin!';
+                resultDiv.className = 'result error';
+                resultDiv.style.display = 'block';
+                return;
+            }
+            
+            if (r > n) {
+                resultDiv.textContent = 'r değeri n değerinden büyük olamaz!';
+                resultDiv.className = 'result error';
+                resultDiv.style.display = 'block';
+                return;
+            }
+            
+            if (n > 20) {
+                resultDiv.textContent = 'Çok büyük sayılar için hesaplama yapılamaz (maksimum 20)';
+                resultDiv.className = 'result error';
+                resultDiv.style.display = 'block';
+                return;
+            }
+            
+            const result = factorial(n) / factorial(n - r);
+            resultDiv.textContent = `P(${n},${r}) = ${result.toLocaleString('tr-TR')}`;
+            resultDiv.className = 'result';
+            resultDiv.style.display = 'block';
+        }
+
+        function calculateCombination() {
+            const n = parseInt(document.getElementById('comb-n').value);
+            const r = parseInt(document.getElementById('comb-r').value);
+            const resultDiv = document.getElementById('comb-result');
+            
+            if (isNaN(n) || isNaN(r) || n < 0 || r < 0) {
+                resultDiv.textContent = 'Lütfen geçerli pozitif sayılar girin!';
+                resultDiv.className = 'result error';
+                resultDiv.style.display = 'block';
+                return;
+            }
+            
+            if (r > n) {
+                resultDiv.textContent = 'r değeri n değerinden büyük olamaz!';
+                resultDiv.className = 'result error';
+                resultDiv.style.display = 'block';
+                return;
+            }
+            
+            if (n > 20) {
+                resultDiv.textContent = 'Çok büyük sayılar için hesaplama yapılamaz (maksimum 20)';
+                resultDiv.className = 'result error';
+                resultDiv.style.display = 'block';
+                return;
+            }
+            
+            const result = factorial(n) / (factorial(r) * factorial(n - r));
+            resultDiv.textContent = `C(${n},${r}) = ${result.toLocaleString('tr-TR')}`;
+            resultDiv.className = 'result';
+            resultDiv.style.display = 'block';
+        }
+
+        function openTab(evt, tabName) {
+            // Tüm tab içeriklerini gizle
+            const tabContents = document.getElementsByClassName('tab-content');
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+            }
+            
+            // Tüm tab butonlarından active sınıfını kaldır
+            const tabButtons = document.getElementsByClassName('tab-button');
+            for (let i = 0; i < tabButtons.length; i++) {
+                tabButtons[i].classList.remove('active');
+            }
+            
+            // Seçilen tab'ı göster ve butonu aktif yap
+            document.getElementById(tabName).classList.add('active');
+            evt.currentTarget.classList.add('active');
+        }
+
+        function toggleSolution(button) {
+            const solution = button.nextElementSibling;
+            if (solution.style.display === 'none' || solution.style.display === '') {
+                solution.style.display = 'block';
+                button.textContent = 'Çözümü Gizle';
+                button.style.background = 'linear-gradient(135deg, #e53e3e 0%, #c53030 100%)';
+            } else {
+                solution.style.display = 'none';
+                button.textContent = 'Çözümü Göster';
+                button.style.background = 'linear-gradient(135deg, #38b2ac 0%, #319795 100%)';
+            }
+        }
+
+        // Enter tuşu ile hesaplama yapabilme
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const activeElement = document.activeElement;
+                if (activeElement.id === 'factorial-n') {
+                    calculateFactorial();
+                } else if (activeElement.id === 'perm-r') {
+                    calculatePermutation();
+                } else if (activeElement.id === 'comb-r') {
+                    calculateCombination();
+                }
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98a7a0f2618f5b02',t:'MTc1OTc3OTYwNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C Programlama Dili - Temel Konular</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100%;
+            color: #333;
+        }
+        
+        html {
+            height: 100%;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .header h1 {
+            color: #4a5568;
+            font-size: 3rem;
+            margin: 0 0 10px 0;
+            font-weight: 700;
+        }
+        
+        .header p {
+            color: #718096;
+            font-size: 1.2rem;
+            margin: 0;
+        }
+        
+        .section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+        
+        .section h2 {
+            color: #2d3748;
+            font-size: 2rem;
+            margin: 0 0 20px 0;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .icon {
+            font-size: 2.5rem;
+        }
+        
+        .code-block {
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 25px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin: 20px 0;
+            overflow-x: auto;
+            border-left: 5px solid #667eea;
+            position: relative;
+        }
+        
+        .code-block::before {
+            content: 'C';
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: #667eea;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .keyword {
+            color: #f56565;
+            font-weight: bold;
+        }
+        
+        .string {
+            color: #68d391;
+        }
+        
+        .comment {
+            color: #a0aec0;
+            font-style: italic;
+        }
+        
+        .function {
+            color: #63b3ed;
+        }
+        
+        .output-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+            border-left: 5px solid #48bb78;
+            position: relative;
+        }
+        
+        .output-block::before {
+            content: 'Çıktı';
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: #48bb78;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .explanation {
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 5px solid #ed8936;
+        }
+        
+        .explanation h4 {
+            color: #2d3748;
+            margin: 0 0 10px 0;
+            font-size: 1.1rem;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        th {
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+        
+        tr:hover {
+            background: #f7fafc;
+        }
+        
+        .try-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+        }
+        
+        .try-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .interactive-demo {
+            background: #f7fafc;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px dashed #cbd5e0;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .section h2 {
+                font-size: 1.5rem;
+            }
+            
+            .code-block, .output-block {
+                font-size: 0.9rem;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 C Programlama Dili</h1>
+            <p>Temel konuları öğrenin: Merhaba Dünya, Kaçış Sekansları ve Değişken Yazdırma</p>
+        </div>
+
+        <!-- Merhaba Dünya Bölümü -->
+        <div class="section">
+            <h2><span class="icon">👋</span>Merhaba Dünya Programı</h2>
+            <p>C programlamaya ilk adım! Her programcının yazdığı ilk program olan "Merhaba Dünya" örneği:</p>
+            
+            <div class="code-block">
+<span class="keyword">#include</span> <span class="string">&lt;stdio.h&gt;</span>
+
+<span class="keyword">int</span> <span class="function">main</span>()
+{
+    <span class="function">printf</span>(<span class="string">"Merhaba Dünya!\n"</span>);
+    <span class="keyword">return</span> 0;
+}
+            </div>
+            
+            <div class="output-block">
+Merhaba Dünya!
+            </div>
+            
+            <div class="explanation">
+                <h4>🔍 Satır Satır Kod Açıklaması:</h4>
+                <ul>
+                    <li><strong>1. satır:</strong> <code>#include &lt;stdio.h&gt;</code> - Standart giriş/çıkış kütüphanesini programa dahil eder (printf fonksiyonu için gerekli)</li>
+                    <li><strong>3. satır:</strong> <code>int main()</code> - Programın başlangıç noktası olan ana fonksiyonu tanımlar</li>
+                    <li><strong>4. satır:</strong> <code>{</code> - Ana fonksiyonun başlangıcını belirtir</li>
+                    <li><strong>5. satır:</strong> <code>printf("Merhaba Dünya!\n");</code> - Ekrana "Merhaba Dünya!" yazısını yazdırır ve yeni satıra geçer (\n)</li>
+                    <li><strong>6. satır:</strong> <code>return 0;</code> - Programın başarıyla sonlandığını işletim sistemine bildirir</li>
+                    <li><strong>7. satır:</strong> <code>}</code> - Ana fonksiyonun sonunu belirtir</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Kaçış Sekansları Bölümü -->
+        <div class="section">
+            <h2><span class="icon">🔤</span>Kaçış Sekansları (Escape Sequences)</h2>
+            <p>Kaçış sekansları, özel karakterleri ve formatları temsil etmek için kullanılır:</p>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Kaçış Sekansı</th>
+                            <th>Açıklama</th>
+                            <th>Örnek Kullanım</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>\n</code></td>
+                            <td>Yeni satır</td>
+                            <td>printf("Satır 1\nSatır 2");</td>
+                        </tr>
+                        <tr>
+                            <td><code>\t</code></td>
+                            <td>Tab (sekme)</td>
+                            <td>printf("Ad:\tAhmet");</td>
+                        </tr>
+                        <tr>
+                            <td><code>\"</code></td>
+                            <td>Çift tırnak</td>
+                            <td>printf("\"Merhaba\"");</td>
+                        </tr>
+                        <tr>
+                            <td><code>\\</code></td>
+                            <td>Ters slash</td>
+                            <td>printf("C:\\Program Files");</td>
+                        </tr>
+                        <tr>
+                            <td><code>\r</code></td>
+                            <td>Satır başı</td>
+                            <td>printf("Test\rYeni");</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="code-block">
+<span class="keyword">#include</span> <span class="string">&lt;stdio.h&gt;</span>
+
+<span class="keyword">int</span> <span class="function">main</span>()
+{
+    <span class="function">printf</span>(<span class="string">"Birinci satır\n"</span>);
+    <span class="function">printf</span>(<span class="string">"İkinci\tsatır\n"</span>);
+    <span class="function">printf</span>(<span class="string">"\"Tırnak içinde metin\"\n"</span>);
+    <span class="function">printf</span>(<span class="string">"Dosya yolu: C:\\Users\\Kullanici\n"</span>);
+    <span class="keyword">return</span> 0;
+}
+            </div>
+            
+            <div class="output-block">
+Birinci satır
+İkinci	satır
+"Tırnak içinde metin"
+Dosya yolu: C:\Users\Kullanici
+            </div>
+            
+            <div class="explanation">
+                <h4>🔍 Satır Satır Kod Açıklaması:</h4>
+                <ul>
+                    <li><strong>1. satır:</strong> <code>#include &lt;stdio.h&gt;</code> - Standart giriş/çıkış kütüphanesini dahil eder</li>
+                    <li><strong>3. satır:</strong> <code>int main()</code> - Ana fonksiyon tanımı</li>
+                    <li><strong>4. satır:</strong> <code>{</code> - Fonksiyon bloğunun başlangıcı</li>
+                    <li><strong>5. satır:</strong> <code>printf("Birinci satır\n");</code> - "Birinci satır" yazdırır ve yeni satıra geçer</li>
+                    <li><strong>6. satır:</strong> <code>printf("İkinci\tsatır\n");</code> - "İkinci" yazdırır, tab boşluğu bırakır, "satır" yazdırır ve yeni satıra geçer</li>
+                    <li><strong>7. satır:</strong> <code>printf("\"Tırnak içinde metin\"\n");</code> - Çift tırnak işaretleri ile birlikte metni yazdırır</li>
+                    <li><strong>8. satır:</strong> <code>printf("Dosya yolu: C:\\Users\\Kullanici\n");</code> - Ters slash karakterlerini yazdırır</li>
+                    <li><strong>9. satır:</strong> <code>return 0;</code> - Programın başarıyla sonlandığını belirtir</li>
+                    <li><strong>10. satır:</strong> <code>}</code> - Fonksiyon bloğunun sonu</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Değişken Yazdırma Bölümü -->
+        <div class="section">
+            <h2><span class="icon">📊</span>Değişken Verilerini Yazdırma</h2>
+            <p>C'de farklı veri tiplerindeki değişkenleri yazdırmak için format belirleyiciler kullanılır:</p>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Format Belirleyici</th>
+                            <th>Veri Tipi</th>
+                            <th>Açıklama</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>%d</code></td>
+                            <td>int</td>
+                            <td>Tam sayı</td>
+                        </tr>
+                        <tr>
+                            <td><code>%f</code></td>
+                            <td>float</td>
+                            <td>Ondalıklı sayı</td>
+                        </tr>
+                        <tr>
+                            <td><code>%c</code></td>
+                            <td>char</td>
+                            <td>Tek karakter</td>
+                        </tr>
+                        <tr>
+                            <td><code>%s</code></td>
+                            <td>string</td>
+                            <td>Metin dizisi</td>
+                        </tr>
+                        <tr>
+                            <td><code>%lf</code></td>
+                            <td>double</td>
+                            <td>Çift hassasiyetli ondalık</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="code-block">
+<span class="keyword">#include</span> <span class="string">&lt;stdio.h&gt;</span>
+
+<span class="keyword">int</span> <span class="function">main</span>()
+{
+    <span class="comment">// Değişken tanımlamaları</span>
+    <span class="keyword">int</span> yas = 25;
+    <span class="keyword">float</span> boy = 1.75;
+    <span class="keyword">char</span> cinsiyet = 'E';
+    <span class="keyword">char</span> isim[] = <span class="string">"Ahmet"</span>;
+    <span class="keyword">double</span> maas = 5500.50;
+    
+    <span class="comment">// Değişkenleri yazdırma</span>
+    <span class="function">printf</span>(<span class="string">"İsim: %s\n"</span>, isim);
+    <span class="function">printf</span>(<span class="string">"Yaş: %d\n"</span>, yas);
+    <span class="function">printf</span>(<span class="string">"Boy: %.2f metre\n"</span>, boy);
+    <span class="function">printf</span>(<span class="string">"Cinsiyet: %c\n"</span>, cinsiyet);
+    <span class="function">printf</span>(<span class="string">"Maaş: %.2lf TL\n"</span>, maas);
+    
+    <span class="keyword">return</span> 0;
+}
+            </div>
+            
+            <div class="output-block">
+İsim: Ahmet
+Yaş: 25
+Boy: 1.75 metre
+Cinsiyet: E
+Maaş: 5500.50 TL
+            </div>
+            
+            <div class="explanation">
+                <h4>🔍 Satır Satır Kod Açıklaması:</h4>
+                <ul>
+                    <li><strong>1. satır:</strong> <code>#include &lt;stdio.h&gt;</code> - Standart giriş/çıkış kütüphanesini dahil eder</li>
+                    <li><strong>3. satır:</strong> <code>int main()</code> - Ana fonksiyon tanımı</li>
+                    <li><strong>4. satır:</strong> <code>{</code> - Fonksiyon bloğunun başlangıcı</li>
+                    <li><strong>5. satır:</strong> <code>// Değişken tanımlamaları</code> - Yorum satırı (derleyici tarafından göz ardı edilir)</li>
+                    <li><strong>6. satır:</strong> <code>int yas = 25;</code> - Tam sayı tipinde "yas" değişkeni tanımlar ve 25 değerini atar</li>
+                    <li><strong>7. satır:</strong> <code>float boy = 1.75;</code> - Ondalıklı sayı tipinde "boy" değişkeni tanımlar ve 1.75 değerini atar</li>
+                    <li><strong>8. satır:</strong> <code>char cinsiyet = 'E';</code> - Karakter tipinde "cinsiyet" değişkeni tanımlar ve 'E' karakterini atar</li>
+                    <li><strong>9. satır:</strong> <code>char isim[] = "Ahmet";</code> - Karakter dizisi (string) tipinde "isim" değişkeni tanımlar ve "Ahmet" metnini atar</li>
+                    <li><strong>10. satır:</strong> <code>double maas = 5500.50;</code> - Çift hassasiyetli ondalık tipinde "maas" değişkeni tanımlar ve 5500.50 değerini atar</li>
+                    <li><strong>12. satır:</strong> <code>// Değişkenleri yazdırma</code> - Yorum satırı</li>
+                    <li><strong>13. satır:</strong> <code>printf("İsim: %s\n", isim);</code> - "İsim: " yazdırır, %s yerine isim değişkeninin değerini koyar ve yeni satıra geçer</li>
+                    <li><strong>14. satır:</strong> <code>printf("Yaş: %d\n", yas);</code> - "Yaş: " yazdırır, %d yerine yas değişkeninin değerini koyar ve yeni satıra geçer</li>
+                    <li><strong>15. satır:</strong> <code>printf("Boy: %.2f metre\n", boy);</code> - "Boy: " yazdırır, %.2f yerine boy değişkeninin değerini (2 ondalık basamakla) koyar ve yeni satıra geçer</li>
+                    <li><strong>16. satır:</strong> <code>printf("Cinsiyet: %c\n", cinsiyet);</code> - "Cinsiyet: " yazdırır, %c yerine cinsiyet değişkeninin değerini koyar ve yeni satıra geçer</li>
+                    <li><strong>17. satır:</strong> <code>printf("Maaş: %.2lf TL\n", maas);</code> - "Maaş: " yazdırır, %.2lf yerine maas değişkeninin değerini (2 ondalık basamakla) koyar ve yeni satıra geçer</li>
+                    <li><strong>19. satır:</strong> <code>return 0;</code> - Programın başarıyla sonlandığını belirtir</li>
+                    <li><strong>20. satır:</strong> <code>}</code> - Fonksiyon bloğunun sonu</li>
+                </ul>
+            </div>
+            
+            <div class="explanation">
+                <h4>💡 Önemli Notlar:</h4>
+                <ul>
+                    <li><strong>%.2f</strong> - Ondalık kısmı 2 basamakla sınırlar</li>
+                    <li><strong>%s</strong> - String (karakter dizisi) için kullanılır</li>
+                    <li><strong>%c</strong> - Tek karakter için kullanılır</li>
+                    <li><strong>%d</strong> - Tam sayılar için kullanılır</li>
+                    <li>Format belirleyicilerin sırası, değişkenlerin sırasıyla eşleşmelidir</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- İnteraktif Demo -->
+        <div class="section">
+            <h2><span class="icon">🎮</span>İnteraktif Örnekler</h2>
+            <p>Aşağıdaki butonlara tıklayarak farklı örnekleri görebilirsiniz:</p>
+            
+            <div class="interactive-demo">
+                <button class="try-button" onclick="showExample('hello')">Merhaba Dünya</button>
+                <button class="try-button" onclick="showExample('escape')">Kaçış Sekansları</button>
+                <button class="try-button" onclick="showExample('variables')">Değişkenler</button>
+                <button class="try-button" onclick="showExample('advanced')">Gelişmiş Örnek</button>
+                
+                <div id="demo-output" style="margin-top: 20px;">
+                    <p style="text-align: center; color: #718096;">Bir örnek seçin ve kodunu görün! 👆</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showExample(type) {
+            const output = document.getElementById('demo-output');
+            
+            const examples = {
+                hello: {
+                    title: '👋 Merhaba Dünya Örneği',
+                    code: `#include <stdio.h>
+
+int main()
+{
+    printf("Merhaba C Dünyası!\\n");
+    printf("İlk programım çalışıyor! 🎉\\n");
+    return 0;
+}`,
+                    result: `Merhaba C Dünyası!
+İlk programım çalışıyor! 🎉`,
+                    explanation: `<strong>Satır Satır Açıklama:</strong><br>
+• 1. satır: Standart giriş/çıkış kütüphanesini dahil eder<br>
+• 3. satır: Ana fonksiyon tanımı<br>
+• 4. satır: Fonksiyon bloğunun başlangıcı<br>
+• 5. satır: "Merhaba C Dünyası!" yazdırır ve yeni satıra geçer<br>
+• 6. satır: "İlk programım çalışıyor! 🎉" yazdırır ve yeni satıra geçer<br>
+• 7. satır: Programın başarıyla sonlandığını belirtir<br>
+• 8. satır: Fonksiyon bloğunun sonu`
+                },
+                escape: {
+                    title: '🔤 Kaçış Sekansları Örneği',
+                    code: `#include <stdio.h>
+
+int main()
+{
+    printf("Satır 1\\n");
+    printf("\\tGirintili satır\\n");
+    printf("Dosya: \\"program.c\\"\\n");
+    printf("Yol: C:\\\\Users\\\\Desktop\\n");
+    return 0;
+}`,
+                    result: `Satır 1
+	Girintili satır
+Dosya: "program.c"
+Yol: C:\\Users\\Desktop`,
+                    explanation: `<strong>Satır Satır Açıklama:</strong><br>
+• 1. satır: Standart giriş/çıkış kütüphanesini dahil eder<br>
+• 3. satır: Ana fonksiyon tanımı<br>
+• 4. satır: Fonksiyon bloğunun başlangıcı<br>
+• 5. satır: "Satır 1" yazdırır ve \\n ile yeni satıra geçer<br>
+• 6. satır: \\t ile tab boşluğu bırakır, "Girintili satır" yazdırır ve yeni satıra geçer<br>
+• 7. satır: \\" ile çift tırnak karakterlerini yazdırır<br>
+• 8. satır: \\\\ ile ters slash karakterlerini yazdırır<br>
+• 9. satır: Programın başarıyla sonlandığını belirtir<br>
+• 10. satır: Fonksiyon bloğunun sonu`
+                },
+                variables: {
+                    title: '📊 Değişken Yazdırma Örneği',
+                    code: `#include <stdio.h>
+
+int main()
+{
+    int sayi = 42;
+    float pi = 3.14159;
+    char harf = 'A';
+    char kelime[] = "Programlama";
+    
+    printf("Sayı: %d\\n", sayi);
+    printf("Pi: %.3f\\n", pi);
+    printf("Harf: %c\\n", harf);
+    printf("Kelime: %s\\n", kelime);
+    return 0;
+}`,
+                    result: `Sayı: 42
+Pi: 3.142
+Harf: A
+Kelime: Programlama`,
+                    explanation: `<strong>Satır Satır Açıklama:</strong><br>
+• 1. satır: Standart giriş/çıkış kütüphanesini dahil eder<br>
+• 3. satır: Ana fonksiyon tanımı<br>
+• 4. satır: Fonksiyon bloğunun başlangıcı<br>
+• 5. satır: Tam sayı değişkeni "sayi" tanımlar ve 42 değerini atar<br>
+• 6. satır: Ondalıklı sayı değişkeni "pi" tanımlar ve 3.14159 değerini atar<br>
+• 7. satır: Karakter değişkeni "harf" tanımlar ve 'A' karakterini atar<br>
+• 8. satır: Karakter dizisi "kelime" tanımlar ve "Programlama" metnini atar<br>
+• 10. satır: %d ile sayi değişkenini yazdırır<br>
+• 11. satır: %.3f ile pi değişkenini 3 ondalık basamakla yazdırır<br>
+• 12. satır: %c ile harf değişkenini yazdırır<br>
+• 13. satır: %s ile kelime değişkenini yazdırır<br>
+• 14. satır: Programın başarıyla sonlandığını belirtir<br>
+• 15. satır: Fonksiyon bloğunun sonu`
+                },
+                advanced: {
+                    title: '🚀 Gelişmiş Örnek',
+                    code: `#include <stdio.h>
+
+int main()
+{
+    char ad[] = "Zeynep";
+    int yas = 22;
+    float not_ort = 87.5;
+    char sinif = 'A';
+    
+    printf("=== ÖĞRENCİ BİLGİ SİSTEMİ ===\\n");
+    printf("Ad Soyad\\t: %s\\n", ad);
+    printf("Yaş\\t\\t: %d\\n", yas);
+    printf("Not Ortalaması\\t: %.1f\\n", not_ort);
+    printf("Sınıf\\t\\t: %c\\n", sinif);
+    return 0;
+}`,
+                    result: `=== ÖĞRENCİ BİLGİ SİSTEMİ ===
+Ad Soyad	: Zeynep
+Yaş		: 22
+Not Ortalaması	: 87.5
+Sınıf		: A`,
+                    explanation: `<strong>Satır Satır Açıklama:</strong><br>
+• 1. satır: Standart giriş/çıkış kütüphanesini dahil eder<br>
+• 3. satır: Ana fonksiyon tanımı<br>
+• 4. satır: Fonksiyon bloğunun başlangıcı<br>
+• 5. satır: Karakter dizisi "ad" tanımlar ve "Zeynep" değerini atar<br>
+• 6. satır: Tam sayı "yas" tanımlar ve 22 değerini atar<br>
+• 7. satır: Ondalıklı sayı "not_ort" tanımlar ve 87.5 değerini atar<br>
+• 8. satır: Karakter "sinif" tanımlar ve 'A' karakterini atar<br>
+• 10. satır: Başlık metnini yazdırır ve yeni satıra geçer<br>
+• 11. satır: "Ad Soyad" yazdırır, \\t ile tab boşluğu bırakır, %s ile ad değişkenini yazdırır<br>
+• 12. satır: "Yaş" yazdırır, \\t\\t ile iki tab boşluğu bırakır, %d ile yas değişkenini yazdırır<br>
+• 13. satır: "Not Ortalaması" yazdırır, tab boşluğu bırakır, %.1f ile not_ort değişkenini 1 ondalık basamakla yazdırır<br>
+• 14. satır: "Sınıf" yazdırır, iki tab boşluğu bırakır, %c ile sinif değişkenini yazdırır<br>
+• 15. satır: Programın başarıyla sonlandığını belirtir<br>
+• 16. satır: Fonksiyon bloğunun sonu`
+                }
+            };
+            
+            const example = examples[type];
+            
+            output.innerHTML = `
+                <h4 style="color: #2d3748; margin-bottom: 15px;">${example.title}</h4>
+                <div class="code-block" style="margin: 15px 0;">
+                    <pre style="margin: 0; white-space: pre-wrap;">${example.code}</pre>
+                </div>
+                <div class="output-block" style="margin: 15px 0;">
+                    <pre style="margin: 0; white-space: pre-wrap;">${example.result}</pre>
+                </div>
+                <div class="explanation" style="margin: 15px 0;">
+                    <h4>🔍 Kod Açıklaması:</h4>
+                    <p>${example.explanation}</p>
+                </div>
+            `;
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98b447ac66da355c',t:'MTc1OTkxMjI2NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
